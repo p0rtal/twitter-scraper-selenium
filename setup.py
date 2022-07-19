@@ -6,14 +6,14 @@ with open("README.md", "r", encoding="utf-8") as file:
 
 setuptools.setup(
     name="twitter_scraper_selenium",
-    version="2.0.0",
-    author="Sajid Shaikh",
-    author_email="shaikhsajid3732@gmail.com",
+    version="2.0.1",
+    author="KT",
+    author_email="kttangri1@gmail.com",
     description="Python package to scrap twitter's front-end easily with selenium",
     long_description=long_description,
     long_description_content_type="text/markdown",
     license="MIT",
-    url="https://github.com/shaikhsajid1111/twitter-scraper-selenium",
+    url="https://github.com/p0rtal/twitter-scraper-selenium.git",
     keywords="web-scraping selenium social media twitter keyword twitter-profile twitter-keywords automation json csv twitter-hashtag hashtag",
     packages=setuptools.find_packages(),
     classifiers=[
