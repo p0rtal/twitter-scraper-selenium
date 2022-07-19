@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as file:
 
 
 setuptools.setup(
-    name="twitter_scraper_selenium",
+    name="twitter_scraper_selenium_fast",
     version="2.0.1",
     author="Sajid Shaikh",
     author_email="shaikhsajid3732@gmail.com",
