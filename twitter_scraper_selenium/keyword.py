@@ -10,6 +10,7 @@ try:
     import os
     import csv
     from twitter_scraper_selenium.scraping_utilities import Scraping_utilities
+    from selenium.common.exceptions import StaleElementReferenceException
 except Exception as ex:
     print(ex)
 
@@ -28,7 +29,7 @@ class Keyword:
         self.proxy = proxy
         self.tweets_count = tweets_count
         self.posts_data = {}
-        self.retry = 10
+        self.retry = 5
         self.headless = headless
 
     def __start_driver(self):
@@ -56,41 +57,41 @@ class Keyword:
 
             while len(self.posts_data) < self.tweets_count:
                 for tweet in present_tweets:
-                    name = Finder._Finder__find_name_from_post(tweet)
+                    # name = Finder._Finder__find_name_from_post(tweet)
                     status, tweet_url = Finder._Finder__find_status(tweet)
-                    replies = Finder._Finder__find_replies(tweet)
-                    retweets = Finder._Finder__find_shares(tweet)
+                    # replies = Finder._Finder__find_replies(tweet)
+                    # retweets = Finder._Finder__find_shares(tweet)
                     username = tweet_url.split("/")[3]
                     status = status[-1]
-                    is_retweet = Finder._Finder__is_retweet(tweet)
-                    posted_time = Finder._Finder__find_timestamp(tweet)
-                    content = Finder._Finder__find_content(tweet)
-                    likes = Finder._Finder__find_like(tweet)
-                    images = Finder._Finder__find_images(tweet)
-                    videos = Finder._Finder__find_videos(tweet)
-                    hashtags = re.findall(r"#(\w+)", content)
-                    mentions = re.findall(r"@(\w+)", content)
-                    profile_picture = "https://twitter.com/{}/photo".format(
-                        username)
-                    link = Finder._Finder__find_external_link(tweet)
+                    # is_retweet = Finder._Finder__is_retweet(tweet)
+                    # posted_time = Finder._Finder__find_timestamp(tweet)
+                    # content = Finder._Finder__find_content(tweet)
+                    # likes = Finder._Finder__find_like(tweet)
+                    # images = Finder._Finder__find_images(tweet)
+                    # videos = Finder._Finder__find_videos(tweet)
+                    # hashtags = re.findall(r"#(\w+)", content)
+                    # mentions = re.findall(r"@(\w+)", content)
+                    # profile_picture = "https://twitter.com/{}/photo".format(
+                    #     username)
+                    # link = Finder._Finder__find_external_link(tweet)
 
                     self.posts_data[status] = {
                         "tweet_id": status,
                         "username": username,
-                        "name": name,
-                        "profile_picture": profile_picture,
-                        "replies": replies,
-                        "retweets": retweets,
-                        "likes": likes,
-                        "is_retweet": is_retweet,
-                        "posted_time": posted_time,
-                        "content": content,
-                        "hashtags": hashtags,
-                        "mentions": mentions,
-                        "images": images,
-                        "videos": videos,
-                        "tweet_url": tweet_url,
-                        "link": link
+                        # "name": name,
+                        # "profile_picture": profile_picture,
+                        # "replies": replies,
+                        # "retweets": retweets,
+                        # "likes": likes,
+                        # "is_retweet": is_retweet,
+                        # "posted_time": posted_time,
+                        # "content": content,
+                        # "hashtags": hashtags,
+                        # "mentions": mentions,
+                        # "images": images,
+                        # "videos": videos,
+                        # "tweet_url": tweet_url,
+                        # "link": link
                     }
 
                 Utilities._Utilities__scroll_down(self.__driver)
@@ -104,7 +105,8 @@ class Keyword:
                 all_ready_fetched_posts.extend(present_tweets)
                 if self.__check_retry() is True:
                     break
-
+        except StaleElementReferenceException as e:
+            raise(e)
         except Exception as ex:
             print("Error at method scrap on line no. {} : {}".format(
                 frameinfo.f_lineno, ex))
@@ -122,6 +124,9 @@ class Keyword:
                         [0:int(self.tweets_count)])
             return json.dumps(data)
 
+        except StaleElementReferenceException as e:
+            self.__close_driver()
+            raise(e)
         except Exception as ex:
             self.__close_driver()
             print(ex)

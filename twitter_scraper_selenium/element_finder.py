@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 try:
     from selenium.common.exceptions import NoSuchElementException
+    from selenium.common.exceptions import StaleElementReferenceException
     from .scraping_utilities import Scraping_utilities
     from inspect import currentframe
     from dateutil.parser import parse
@@ -62,6 +63,8 @@ class Finder:
             anchor = tweet.find_element(
                 By.CSS_SELECTOR, "a.r-bcqeeo.r-3s2u2q.r-qvutc0")
             return (anchor.get_attribute("href").split("/"), anchor.get_attribute("href"))
+        except StaleElementReferenceException as e:
+            raise(e)
         except Exception as ex:
             print("Error at method find_status on line no. {} : {}".format(
                 frameinfo.f_lineno, ex))

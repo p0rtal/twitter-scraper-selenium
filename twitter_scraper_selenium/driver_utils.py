@@ -47,7 +47,7 @@ class Utilities:
         try:
             state = ""
             while state != "complete":
-                time.sleep(0.75)
+                time.sleep(0.2)
                 state = driver.execute_script("return document.readyState")
         except Exception as ex:
             print(ex)
